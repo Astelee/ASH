@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_data.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/stats/cultist_stats.tres" id="2_stats"]
+[ext_resource type="Resource" path="res://data/items/cultist_flask.tres" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://combat/RotFlask.tscn" id="4_projectile"]
+[ext_resource type="Resource" path="res://data/moves/cultist_throw.tres" id="5_move0"]
+[ext_resource type="Resource" path="res://data/status/status_rot.tres" id="rot"]
+
+[resource]
+script = ExtResource("1_enemy")
+display_name = "Crow-Mask Cultist"
+stats = ExtResource("2_stats")
+max_poise = 25.0
+defense = 18.0
+ember_drop = 175
+resist_physical = 0.0
+resist_fire = 0.0
+resist_rot = 0.5
+resist_holy = 0.0
+moveset = Array[Resource]([ExtResource("5_move0")])
+weapon = ExtResource("3_weapon")
+move_speed = 2.2
+detect_range = 16.0
+attack_range = 9.0
+reposition_range = 8.0
+recover_time = 0.9
+is_ranged = true
+projectile_scene = ExtResource("4_projectile")
+retreat_range = 5.5
+inflicts = ExtResource("rot")
+inflict_buildup = 1.0

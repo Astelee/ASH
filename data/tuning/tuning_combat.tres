@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="CombatTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/tuning/combat_tuning.gd" id="1_combat"]
+
+[resource]
+script = ExtResource("1_combat")
+dodge_duration = 0.5
+iframe_start = 0.08
+iframe_end = 0.32
+dodge_distance = 3.4
+dodge_stamina = 20.0
+parry_window_button = 0.18
+parry_window_touch = 0.24
+riposte_window = 1.5
+parry_stamina_gain = 15.0
+block_stamina_flat = 15.0
+block_stamina_per_damage = 0.5
+guard_break_stagger = 1.2
+riposte_multiplier = 2.2
+poise_break_stagger = 1.4
+player_poise_regen = 25.0
+player_poise_delay = 1.0
+enemy_poise_regen = 15.0
+enemy_poise_delay = 2.0
+hitstop_light = 0.06
+hitstop_heavy = 0.11
+hitstop_riposte = 0.18
+attack_tokens = 2
+hit_flash_duration = 0.12
+damage_number_lifetime = 0.9

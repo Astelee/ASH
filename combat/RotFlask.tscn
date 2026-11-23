@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://combat/projectile.gd" id="1_proj"]
+
+[sub_resource type="SphereShape3D" id="Shape_flask"]
+radius = 0.22
+
+[sub_resource type="SphereMesh" id="Mesh_flask"]
+radius = 0.18
+height = 0.36
+
+[node name="RotFlask" type="Area3D"]
+collision_layer = 32
+collision_mask = 17
+script = ExtResource("1_proj")
+speed = 11.0
+arc_gravity = 14.0
+lifetime = 5.0
+splash_radius = 1.4
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_flask")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_flask")

@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/surface/character_pbr.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/roughness_value = 0.84
+shader_parameter/metallic_value = 0.0
+shader_parameter/use_orm = false
+shader_parameter/ao_strength = 1.0
+shader_parameter/normal_strength = 1.0
+shader_parameter/detail_tiling = 11.0
+shader_parameter/detail_strength = 0.55
+shader_parameter/diffuse_wrap = 0.14
+shader_parameter/wrap_tint = Color(0.6, 0.3, 0.26, 1)
+shader_parameter/rim_power = 5.5
+shader_parameter/rim_strength = 0.26
+shader_parameter/dissolve_edge_color = Color(1, 0.45, 0.12, 1)
+shader_parameter/dissolve_edge_width = 0.06

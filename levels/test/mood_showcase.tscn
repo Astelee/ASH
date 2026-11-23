@@ -1,0 +1,121 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://levels/level_root.gd" id="1_root"]
+[ext_resource type="PackedScene" path="res://actors/player/Player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://actors/player/player_camera.gd" id="3_camera"]
+[ext_resource type="Resource" path="res://data/tuning/tuning_camera.tres" id="4_camtuning"]
+[ext_resource type="PackedScene" path="res://ui/hud/TouchControls.tscn" id="5_touch"]
+[ext_resource type="Resource" path="res://data/biomes/mood_village.tres" id="6_village"]
+[ext_resource type="Resource" path="res://data/biomes/mood_ossuary.tres" id="7_ossuary"]
+[ext_resource type="Script" path="res://levels/props/mood_trigger.gd" id="8_trigger"]
+[ext_resource type="Script" path="res://art/vfx/fog_card_field.gd" id="9_fog"]
+[ext_resource type="Material" path="res://art/materials/mat_fog_card.tres" id="10_fogmat"]
+[ext_resource type="Material" path="res://art/materials/mat_terrain.tres" id="11_terrain"]
+[ext_resource type="PackedScene" path="res://ui/hud/GameHud.tscn" id="hud_game"]
+[ext_resource type="PackedScene" path="res://ui/hud/ColorGrade.tscn" id="hud_grade"]
+
+[sub_resource type="Environment" id="Environment_showcase"]
+background_mode = 1
+background_color = Color(0.09, 0.1, 0.13, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.5, 0.6, 1)
+ambient_light_energy = 0.55
+fog_enabled = true
+fog_light_color = Color(0.78, 0.54, 0.29, 1)
+fog_density = 0.012
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 8, 12)
+
+[node name="MoodShowcase" type="Node3D" node_paths=PackedStringArray("world_environment", "sun", "camera_rig")]
+script = ExtResource("1_root")
+starting_mood = ExtResource("6_village")
+world_environment = NodePath("Environment")
+sun = NodePath("Sun")
+camera_rig = NodePath("CameraRig")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_showcase")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 12, 0)
+light_energy = 1.6
+shadow_enabled = true
+directional_shadow_max_distance = 45.0
+
+[node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -0.5, 0)
+use_collision = true
+size = Vector3(110, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="BackWall" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 6, -6.5)
+use_collision = true
+size = Vector3(110, 14, 1)
+material = ExtResource("11_terrain")
+
+[node name="CryptCeiling" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78, 6.5, 0)
+use_collision = true
+size = Vector3(46, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="VillageFog" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.5, 0)
+script = ExtResource("9_fog")
+card_count = 40
+extents = Vector3(40, 4, 8)
+size_min = 3.0
+size_max = 7.0
+card_material = ExtResource("10_fogmat")
+seed_value = 11
+
+[node name="CryptFog" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78, 0.5, 0)
+script = ExtResource("9_fog")
+card_count = 60
+extents = Vector3(44, 3, 8)
+size_min = 2.5
+size_max = 5.0
+card_material = ExtResource("10_fogmat")
+seed_value = 22
+
+[node name="ToOssuary" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 2, 0)
+script = ExtResource("8_trigger")
+mood = ExtResource("7_ossuary")
+duration = 4.0
+
+[node name="Shape" type="CollisionShape3D" parent="ToOssuary"]
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="BackToVillage" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 0)
+script = ExtResource("8_trigger")
+mood = ExtResource("6_village")
+duration = 4.0
+
+[node name="Shape" type="CollisionShape3D" parent="BackToVillage"]
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.2, 0)
+
+[node name="CameraRig" type="Node3D" parent="." node_paths=PackedStringArray("target", "camera")]
+script = ExtResource("3_camera")
+target = NodePath("../Player")
+tuning = ExtResource("4_camtuning")
+camera = NodePath("Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 0, 2.4, 8)
+fov = 42.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TouchControls" parent="HUD" instance=ExtResource("5_touch")]
+
+[node name="GameHud" parent="HUD" instance=ExtResource("hud_game")]
+
+[node name="ColorGrade" parent="." instance=ExtResource("hud_grade")]

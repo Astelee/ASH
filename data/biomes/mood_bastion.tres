@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="BiomeMood" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/biomes/biome_mood.gd" id="1_mood"]
+
+[resource]
+script = ExtResource("1_mood")
+id = &"bastion"
+display_name = "Bastion of the Pale King"
+fog_color = Color(0.28, 0.24, 0.42, 1)
+fog_density = 0.03
+fog_height_min = -2.0
+fog_height_max = 18.0
+fog_card_density = 1.0
+ambient_color = Color(0.34, 0.32, 0.5, 1)
+ambient_energy = 0.3
+sun_color = Color(0.62, 0.60, 0.90, 1)
+sun_energy = 0.7
+sun_elevation = -45.0
+sun_azimuth = 200.0
+rim_color = Color(0.8, 0.6, 1.0, 1)
+exposure_ev = -0.1
+white_point = 2.2
+contrast = 1.02
+saturation = 0.88
+sky_horizon = Color(0.55, 0.46, 0.42, 1)
+sky_top = Color(0.2, 0.25, 0.34, 1)
+sky_ground = Color(0.13, 0.12, 0.12, 1)
+aerial_perspective = 0.55
+fog_sun_scatter = 0.5
+glow_strength = 0.26
+lut_blend = 1.0
+vignette_strength = 0.3
+grain_amount = 0.05
+chromatic_aberration = 0.2
+wind_strength = 1.0
+camera_fov = 46.0
+reverb_wet = 0.4
+music_stem_mask = 31
+particle_preset = &"rain"

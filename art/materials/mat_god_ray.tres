@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/vfx/god_ray_cone.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/ray_color = Color(1, 0.86, 0.58, 1)
+shader_parameter/intensity = 0.6
+shader_parameter/depth_fade = 0.8

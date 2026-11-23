@@ -1,0 +1,329 @@
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://levels/level_root.gd" id="1_root"]
+[ext_resource type="PackedScene" path="res://actors/player/Player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://actors/player/player_camera.gd" id="3_camera"]
+[ext_resource type="Resource" path="res://data/tuning/tuning_camera.tres" id="4_camtuning"]
+[ext_resource type="PackedScene" path="res://ui/hud/TouchControls.tscn" id="5_touch"]
+[ext_resource type="Resource" path="res://data/biomes/mood_village.tres" id="6_village"]
+[ext_resource type="Script" path="res://actors/npc/wayshrine.gd" id="7_shrine"]
+[ext_resource type="Script" path="res://levels/encounter_volume.gd" id="8_encounter"]
+[ext_resource type="PackedScene" path="res://actors/enemies/Husk.tscn" id="9_husk"]
+[ext_resource type="Script" path="res://levels/props/shortcut_gate.gd" id="10_gate"]
+[ext_resource type="Material" path="res://art/materials/mat_terrain.tres" id="11_terrain"]
+[ext_resource type="Script" path="res://levels/props/parallax_lane.gd" id="12_lane"]
+[ext_resource type="Script" path="res://art/vfx/fog_card_field.gd" id="13_fog"]
+[ext_resource type="Material" path="res://art/materials/mat_fog_card.tres" id="14_fogmat"]
+[ext_resource type="Script" path="res://tools/prop_scatter.gd" id="15_scatter"]
+[ext_resource type="Material" path="res://art/materials/mat_foliage.tres" id="16_foliage"]
+[ext_resource type="Script" path="res://ui/hud/damage_number_pool.gd" id="17_numbers"]
+[ext_resource type="PackedScene" path="res://ui/hud/GameHud.tscn" id="hud_game"]
+[ext_resource type="PackedScene" path="res://ui/hud/ColorGrade.tscn" id="hud_grade"]
+[ext_resource type="PackedScene" path="res://actors/npc/Bloodstain.tscn" id="stain"]
+
+[sub_resource type="Environment" id="Env_village"]
+background_mode = 1
+background_color = Color(0.16, 0.13, 0.11, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.5, 0.6, 1)
+ambient_light_energy = 0.55
+fog_enabled = true
+fog_light_color = Color(0.78, 0.54, 0.29, 1)
+fog_density = 0.012
+
+[sub_resource type="BoxShape3D" id="Shape_trigger"]
+size = Vector3(5, 6, 10)
+
+[sub_resource type="BoxShape3D" id="Shape_barrier"]
+size = Vector3(3.5, 0.6, 12)
+
+[sub_resource type="QuadMesh" id="Mesh_grass"]
+size = Vector2(0.5, 0.6)
+
+[node name="AshfallVillage" type="Node3D" node_paths=PackedStringArray("world_environment", "sun", "camera_rig")]
+script = ExtResource("1_root")
+starting_mood = ExtResource("6_village")
+world_environment = NodePath("Environment")
+sun = NodePath("Sun")
+camera_rig = NodePath("CameraRig")
+level_id = "ashfall_village"
+bloodstain_scene = ExtResource("stain")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env_village")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.906308, -0.271654, 0.32139, 0, 0.762127, 0.647386, -0.422618, -0.586715, 0.690253, 0, 14, 0)
+light_energy = 1.6
+light_color = Color(1, 0.78, 0.52, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 45.0
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="StreetLower" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, -0.5, 0)
+use_collision = true
+size = Vector3(66, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="ClimbLanding" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 2.0, 0)
+use_collision = true
+size = Vector3(10, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="ClimbUpper" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 5.5, 0)
+use_collision = true
+size = Vector3(10, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="StreetUpper" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 8.5, 0)
+use_collision = true
+size = Vector3(60, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="Gatehouse" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 8.5, 0)
+use_collision = true
+size = Vector3(12, 1, 12)
+material = ExtResource("11_terrain")
+
+[node name="BackWall" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 12, -6.5)
+use_collision = true
+size = Vector3(150, 34, 1)
+material = ExtResource("11_terrain")
+
+[node name="FrontLipLower" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0.5, 6.2)
+use_collision = true
+size = Vector3(150, 3, 0.6)
+material = ExtResource("11_terrain")
+
+[node name="FrontLipUpper" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 9.5, 6.2)
+use_collision = true
+size = Vector3(150, 3, 0.6)
+material = ExtResource("11_terrain")
+
+[node name="EastWall" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, 12, 0)
+use_collision = true
+size = Vector3(1, 34, 12)
+material = ExtResource("11_terrain")
+
+[node name="WestWallLower" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 4, 0)
+use_collision = true
+size = Vector3(1, 12, 12)
+material = ExtResource("11_terrain")
+
+[node name="WestWallUpper" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 12, 0)
+use_collision = true
+size = Vector3(1, 10, 12)
+material = ExtResource("11_terrain")
+
+[node name="ShaftWallEast" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6, 4.5, 0)
+use_collision = true
+size = Vector3(1.2, 9, 12)
+material = ExtResource("11_terrain")
+
+[node name="ShortcutBarrier" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 8.2, 0)
+
+[node name="Mesh" type="CSGBox3D" parent="Geometry/ShortcutBarrier"]
+use_collision = false
+size = Vector3(3.5, 0.6, 12)
+material = ExtResource("11_terrain")
+
+[node name="Shape" type="CollisionShape3D" parent="Geometry/ShortcutBarrier"]
+shape = SubResource("Shape_barrier")
+
+[node name="ShortcutGate" type="Area3D" parent="." node_paths=PackedStringArray("barrier")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 10, 0)
+script = ExtResource("10_gate")
+gate_id = "village_shortcut"
+barrier = NodePath("../Geometry/ShortcutBarrier")
+openable_from_x = 20.0
+opens_from_right = false
+
+[node name="Shape" type="CollisionShape3D" parent="ShortcutGate"]
+shape = SubResource("Shape_trigger")
+
+[node name="LaneNear" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -6.0)
+script = ExtResource("12_lane")
+parallax_factor = 0.15
+affect_vertical = false
+
+[node name="Silhouette" type="CSGBox3D" parent="LaneNear"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0, 0)
+use_collision = false
+size = Vector3(120, 10, 1)
+material = ExtResource("11_terrain")
+
+[node name="LaneMid" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -14.0)
+script = ExtResource("12_lane")
+parallax_factor = 0.45
+affect_vertical = false
+
+[node name="Silhouette" type="CSGBox3D" parent="LaneMid"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.0, 0)
+use_collision = false
+size = Vector3(150, 20, 1)
+material = ExtResource("11_terrain")
+
+[node name="LaneFar" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -40.0)
+script = ExtResource("12_lane")
+parallax_factor = 0.8
+affect_vertical = false
+
+[node name="Silhouette" type="CSGBox3D" parent="LaneFar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22.0, 0)
+use_collision = false
+size = Vector3(240, 44, 1)
+material = ExtResource("11_terrain")
+
+[node name="WayshrineGate" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 0)
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("7_shrine")
+shrine_id = "village_gate"
+
+[node name="Shape" type="CollisionShape3D" parent="WayshrineGate"]
+shape = SubResource("Shape_trigger")
+
+[node name="Marker" type="CSGBox3D" parent="WayshrineGate"]
+use_collision = false
+size = Vector3(0.6, 2.4, 0.6)
+material = ExtResource("11_terrain")
+
+[node name="WayshrineSquare" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 10, 0)
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("7_shrine")
+shrine_id = "village_square"
+
+[node name="Shape" type="CollisionShape3D" parent="WayshrineSquare"]
+shape = SubResource("Shape_trigger")
+
+[node name="Marker" type="CSGBox3D" parent="WayshrineSquare"]
+use_collision = false
+size = Vector3(0.6, 2.4, 0.6)
+material = ExtResource("11_terrain")
+
+[node name="EncounterWell" type="Area3D" parent="." node_paths=PackedStringArray("spawn_parent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0.7, 0)
+script = ExtResource("8_encounter")
+encounter_id = "village_well"
+enemy_scene = ExtResource("9_husk")
+spawn_parent = NodePath("Spawns")
+max_attackers = 2
+activation_range = 26.0
+clear_once = false
+
+[node name="Spawns" type="Node3D" parent="EncounterWell"]
+
+[node name="M0" type="Marker3D" parent="EncounterWell/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.0, 0)
+
+[node name="M1" type="Marker3D" parent="EncounterWell/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.0, 0)
+
+[node name="EncounterSquare" type="Area3D" parent="." node_paths=PackedStringArray("spawn_parent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54, 0.7, 0)
+script = ExtResource("8_encounter")
+encounter_id = "village_square_fight"
+enemy_scene = ExtResource("9_husk")
+spawn_parent = NodePath("Spawns")
+max_attackers = 2
+activation_range = 26.0
+clear_once = false
+
+[node name="Spawns" type="Node3D" parent="EncounterSquare"]
+
+[node name="M0" type="Marker3D" parent="EncounterSquare/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.0, 0)
+
+[node name="M1" type="Marker3D" parent="EncounterSquare/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.0, 0)
+
+[node name="M2" type="Marker3D" parent="EncounterSquare/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.0, 0)
+
+[node name="EncounterGatehouse" type="Area3D" parent="." node_paths=PackedStringArray("spawn_parent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 9.7, 0)
+script = ExtResource("8_encounter")
+encounter_id = "village_gatehouse"
+enemy_scene = ExtResource("9_husk")
+spawn_parent = NodePath("Spawns")
+max_attackers = 2
+activation_range = 26.0
+clear_once = false
+
+[node name="Spawns" type="Node3D" parent="EncounterGatehouse"]
+
+[node name="M0" type="Marker3D" parent="EncounterGatehouse/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.0, 0)
+
+[node name="M1" type="Marker3D" parent="EncounterGatehouse/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.0, 0)
+
+[node name="M2" type="Marker3D" parent="EncounterGatehouse/Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.0, 0)
+
+[node name="StreetFog" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0.5, 1)
+script = ExtResource("13_fog")
+card_count = 45
+extents = Vector3(70, 4, 8)
+size_min = 3.0
+size_max = 7.0
+card_material = ExtResource("14_fogmat")
+seed_value = 5150
+
+[node name="Grass" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.05, 2)
+script = ExtResource("15_scatter")
+prop_mesh = SubResource("Mesh_grass")
+prop_material = ExtResource("16_foliage")
+count = 220
+extents = Vector3(60, 0, 7)
+scale_min = 0.7
+scale_max = 1.4
+random_yaw = true
+seed_value = 777
+
+[node name="DamageNumbers" type="Node3D" parent="."]
+script = ExtResource("17_numbers")
+pool_size = 24
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.4, 0)
+
+[node name="CameraRig" type="Node3D" parent="." node_paths=PackedStringArray("target", "camera")]
+script = ExtResource("3_camera")
+target = NodePath("../Player")
+tuning = ExtResource("4_camtuning")
+camera = NodePath("Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 0, 2.4, 8)
+fov = 42.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TouchControls" parent="HUD" instance=ExtResource("5_touch")]
+
+[node name="GameHud" parent="HUD" instance=ExtResource("hud_game")]
+
+[node name="ColorGrade" parent="." instance=ExtResource("hud_grade")]

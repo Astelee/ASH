@@ -1,0 +1,142 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/enemies/enemy_warden.tres" id="2_data"]
+[ext_resource type="Resource" path="res://data/tuning/tuning_combat.tres" id="3_ctuning"]
+[ext_resource type="Script" path="res://systems/state_machine.gd" id="4_machine"]
+[ext_resource type="Script" path="res://combat/combatant.gd" id="5_combatant"]
+[ext_resource type="Script" path="res://combat/hitbox.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://combat/hurtbox.gd" id="7_hurtbox"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_idle_state.gd" id="8_idle"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_alert_state.gd" id="9_alert"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_approach_state.gd" id="10_approach"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_attack_state.gd" id="11_attack"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_recover_state.gd" id="12_recover"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_reposition_state.gd" id="13_reposition"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_stagger_state.gd" id="14_stagger"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_dead_state.gd" id="15_dead"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_ranged_state.gd" id="16_ranged"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_retreat_state.gd" id="17_retreat"]
+[ext_resource type="Script" path="res://actors/enemies/states/enemy_lunge_state.gd" id="18_lunge"]
+[ext_resource type="Material" path="res://art/materials/mat_enemy_pbr.tres" id="mat_pbr"]
+[ext_resource type="Script" path="res://combat/hit_feedback.gd" id="fx_feedback"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_husk"]
+radius = 0.35
+height = 1.9
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_husk"]
+material = ExtResource("mat_pbr")
+radius = 0.35
+height = 1.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_husk_nub"]
+material = ExtResource("mat_pbr")
+size = Vector3(0.36, 0.12, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_husk_hit"]
+size = Vector3(1.5, 1.2, 1.0)
+
+[node name="Warden" type="CharacterBody3D" node_paths=PackedStringArray("state_machine", "combatant", "hitbox", "hurtbox", "body")]
+collision_layer = 4
+collision_mask = 1
+floor_snap_length = 0.3
+script = ExtResource("1_enemy")
+data = ExtResource("2_data")
+combat_tuning = ExtResource("3_ctuning")
+state_machine = NodePath("StateMachine")
+combatant = NodePath("Combatant")
+hitbox = NodePath("Hitbox")
+hurtbox = NodePath("Hurtbox")
+body = NodePath("Body")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CapsuleShape3D_husk")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("CapsuleMesh_husk")
+instance_shader_parameters/albedo_color = Color(0.32, 0.34, 0.4, 1)
+
+[node name="FacingNub" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 1.35, 0)
+mesh = SubResource("BoxMesh_husk_nub")
+instance_shader_parameters/albedo_color = Color(0.32, 0.34, 0.4, 1)
+
+[node name="Combatant" type="Node" parent="."]
+script = ExtResource("5_combatant")
+tuning = ExtResource("3_ctuning")
+max_poise = 40.0
+defense = 24.0
+use_enemy_poise_profile = true
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("actor")]
+collision_layer = 64
+collision_mask = 0
+monitoring = false
+script = ExtResource("7_hurtbox")
+actor = NodePath("..")
+
+[node name="HurtShape" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CapsuleShape3D_husk")
+
+[node name="Hitbox" type="Area3D" parent="." node_paths=PackedStringArray("actor", "shape")]
+collision_layer = 32
+collision_mask = 16
+monitoring = false
+script = ExtResource("6_hitbox")
+actor = NodePath("..")
+shape = NodePath("HitShape")
+
+[node name="HitShape" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+shape = SubResource("BoxShape3D_husk_hit")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("actor", "initial_state")]
+script = ExtResource("4_machine")
+actor = NodePath("..")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("8_idle")
+
+[node name="Alert" type="Node" parent="StateMachine"]
+script = ExtResource("9_alert")
+
+[node name="Approach" type="Node" parent="StateMachine"]
+script = ExtResource("10_approach")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("11_attack")
+
+[node name="Recover" type="Node" parent="StateMachine"]
+script = ExtResource("12_recover")
+
+[node name="Reposition" type="Node" parent="StateMachine"]
+script = ExtResource("13_reposition")
+
+[node name="Stagger" type="Node" parent="StateMachine"]
+script = ExtResource("14_stagger")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("15_dead")
+
+[node name="Ranged" type="Node" parent="StateMachine"]
+script = ExtResource("16_ranged")
+
+[node name="Retreat" type="Node" parent="StateMachine"]
+script = ExtResource("17_retreat")
+
+[node name="Lunge" type="Node" parent="StateMachine"]
+script = ExtResource("18_lunge")
+
+[node name="HitFeedback" type="Node" parent="." node_paths=PackedStringArray("meshes", "actor", "combatant")]
+script = ExtResource("fx_feedback")
+meshes = [NodePath("Body/Mesh"), NodePath("Body/FacingNub")]
+actor = NodePath("..")
+combatant = NodePath("../Combatant")
+combat_tuning = ExtResource("3_ctuning")

@@ -1,0 +1,43 @@
+# Godot writes LF on every platform. Without this, core.autocrlf=true on Windows rewrites every
+# .tscn/.tres/.gd on checkout and every diff becomes noise — and a CRLF shell script fails in bash
+# with "\r: command not found".
+* text=auto eol=lf
+
+*.sh          text eol=lf
+*.gd          text eol=lf
+*.gdshader    text eol=lf
+*.gdshaderinc text eol=lf
+*.tscn        text eol=lf
+*.tres        text eol=lf
+*.godot       text eol=lf
+*.cfg         text eol=lf
+*.import      text eol=lf
+*.md          text eol=lf
+*.csv         text eol=lf
+*.json        text eol=lf
+
+# Gradle wrapper scripts are Windows-native.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary — never diff, never convert.
+*.png    binary
+*.jpg    binary
+*.webp   binary
+*.exr    binary
+*.hdr    binary
+*.ktx    binary
+*.glb    binary
+*.gltf   binary
+*.blend  binary
+*.fbx    binary
+*.ogg    binary
+*.wav    binary
+*.mp3    binary
+*.ttf    binary
+*.otf    binary
+*.lmbake binary
+*.res    binary
+*.scn    binary
+*.aab    binary
+*.apk    binary

@@ -1,0 +1,5 @@
+# gdlint overrides. Everything not listed keeps the gdtoolkit default.
+#
+# max-public-methods: a GUT suite is a class whose public methods *are* the tests. The default of 20
+# would cap a test file at 20 cases, which is a linter deciding how thoroughly we test.
+max-public-methods: 60

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CameraTuning" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/tuning/camera_tuning.gd" id="1_camera"]
+
+[resource]
+script = ExtResource("1_camera")
+fov = 42.0
+offset_z = 8.0
+offset_y = 2.4
+pitch_deg = -6.0
+damping_horizontal = 0.12
+damping_vertical = 0.28
+look_ahead = 1.8
+dead_zone = 0.6
+vertical_snap_grounded_only = true

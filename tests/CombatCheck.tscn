@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://levels/test/combat_gym.tscn" id="1_gym"]
+[ext_resource type="Script" path="res://tests/combat_check.gd" id="2_check"]
+
+[node name="CombatCheck" type="Node"]
+
+[node name="CombatGym" parent="." instance=ExtResource("1_gym")]
+
+[node name="Checker" type="Node" parent="."]
+script = ExtResource("2_check")

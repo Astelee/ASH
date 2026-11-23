@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="StatBlock" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/stats/stat_block.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+vigor = 10
+endurance = 12
+might = 20
+finesse = 10
+ember_bound = 8
+health_base = 100.0
+health_per_vigor = 14.0
+stamina_base = 100.0
+stamina_per_endurance = 6.0
+stamina_regen_base = 18.0
+stamina_regen_per_endurance = 0.4
+stamina_regen_delay = 0.8
+iframe_per_ten_finesse = 0.01

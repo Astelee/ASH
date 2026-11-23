@@ -1,0 +1,189 @@
+[gd_scene load_steps=30 format=3]
+
+[ext_resource type="Script" path="res://actors/player/player.gd" id="1_player"]
+[ext_resource type="Resource" path="res://data/tuning/tuning_movement.tres" id="2_tuning"]
+[ext_resource type="Script" path="res://systems/state_machine.gd" id="3_machine"]
+[ext_resource type="Script" path="res://actors/player/states/idle_state.gd" id="4_idle"]
+[ext_resource type="Script" path="res://actors/player/states/run_state.gd" id="5_run"]
+[ext_resource type="Script" path="res://actors/player/states/jump_state.gd" id="6_jump"]
+[ext_resource type="Script" path="res://actors/player/states/fall_state.gd" id="7_fall"]
+[ext_resource type="Script" path="res://actors/player/states/land_state.gd" id="8_land"]
+[ext_resource type="Script" path="res://actors/player/states/ledge_grab_state.gd" id="9_ledge"]
+[ext_resource type="Script" path="res://combat/combatant.gd" id="10_combatant"]
+[ext_resource type="Script" path="res://combat/hitbox.gd" id="11_hitbox"]
+[ext_resource type="Script" path="res://combat/hurtbox.gd" id="12_hurtbox"]
+[ext_resource type="Resource" path="res://data/tuning/tuning_combat.tres" id="13_ctuning"]
+[ext_resource type="Resource" path="res://data/stats/player_start_stats.tres" id="14_stats"]
+[ext_resource type="Resource" path="res://data/items/ashen_longsword.tres" id="15_weapon"]
+[ext_resource type="Resource" path="res://data/items/wooden_kite.tres" id="16_shield"]
+[ext_resource type="Resource" path="res://data/moves/light_1.tres" id="17_l1"]
+[ext_resource type="Resource" path="res://data/moves/light_2.tres" id="18_l2"]
+[ext_resource type="Resource" path="res://data/moves/light_3.tres" id="19_l3"]
+[ext_resource type="Resource" path="res://data/moves/heavy.tres" id="20_heavy"]
+[ext_resource type="Script" path="res://actors/player/states/attack_state.gd" id="21_attack"]
+[ext_resource type="Script" path="res://actors/player/states/heavy_state.gd" id="22_heavy"]
+[ext_resource type="Script" path="res://actors/player/states/dodge_state.gd" id="23_dodge"]
+[ext_resource type="Script" path="res://actors/player/states/block_state.gd" id="24_block"]
+[ext_resource type="Script" path="res://actors/player/states/stagger_state.gd" id="25_stagger"]
+[ext_resource type="Script" path="res://actors/player/states/death_state.gd" id="26_death"]
+[ext_resource type="Script" path="res://actors/player/states/flask_state.gd" id="27_flask"]
+[ext_resource type="Material" path="res://art/materials/mat_character_pbr.tres" id="mat_pbr"]
+[ext_resource type="Script" path="res://audio/footstep_emitter.gd" id="28_steps"]
+[ext_resource type="Script" path="res://combat/hit_feedback.gd" id="fx_feedback"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = ExtResource("mat_pbr")
+radius = 0.35
+height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hit"]
+size = Vector3(1.4, 1.2, 1.0)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurt"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+material = ExtResource("mat_pbr")
+size = Vector3(0.36, 0.12, 0.12)
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("state_machine", "ledge_wall_ray", "ledge_floor_ray", "body", "combatant", "hurtbox", "hitbox")]
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.3
+script = ExtResource("1_player")
+tuning = ExtResource("2_tuning")
+state_machine = NodePath("StateMachine")
+ledge_wall_ray = NodePath("LedgeWallRay")
+ledge_floor_ray = NodePath("LedgeFloorRay")
+body = NodePath("Body")
+combatant = NodePath("Combatant")
+combat_tuning = ExtResource("13_ctuning")
+hurtbox = NodePath("Hurtbox")
+hitbox = NodePath("Hitbox")
+weapon = ExtResource("15_weapon")
+shield = ExtResource("16_shield")
+light_combo = Array[Resource]([ExtResource("17_l1"), ExtResource("18_l2"), ExtResource("19_l3")])
+heavy_move = ExtResource("20_heavy")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_body")
+instance_shader_parameters/albedo_color = Color(0.63, 0.65, 0.7, 1)
+
+[node name="FacingNub" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 1.45, 0)
+mesh = SubResource("BoxMesh_facing")
+instance_shader_parameters/albedo_color = Color(0.63, 0.65, 0.7, 1)
+
+[node name="LedgeWallRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+target_position = Vector3(0.5, 0, 0)
+collide_with_areas = false
+
+[node name="LedgeFloorRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.7, 0)
+target_position = Vector3(0, -0.8, 0)
+collide_with_areas = false
+
+[node name="Combatant" type="Node" parent="."]
+script = ExtResource("10_combatant")
+stats = ExtResource("14_stats")
+tuning = ExtResource("13_ctuning")
+max_poise = 60.0
+defense = 25.0
+use_enemy_poise_profile = false
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("actor")]
+collision_layer = 16
+collision_mask = 0
+monitoring = false
+script = ExtResource("12_hurtbox")
+actor = NodePath("..")
+
+[node name="HurtShape" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_hurt")
+
+[node name="Hitbox" type="Area3D" parent="." node_paths=PackedStringArray("actor", "shape")]
+collision_layer = 8
+collision_mask = 64
+monitoring = false
+script = ExtResource("11_hitbox")
+actor = NodePath("..")
+shape = NodePath("HitShape")
+
+[node name="HitShape" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1, 0)
+shape = SubResource("BoxShape3D_hit")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("actor", "initial_state")]
+script = ExtResource("3_machine")
+actor = NodePath("..")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_idle")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("5_run")
+
+[node name="Jump" type="Node" parent="StateMachine"]
+script = ExtResource("6_jump")
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource("7_fall")
+
+[node name="Land" type="Node" parent="StateMachine"]
+script = ExtResource("8_land")
+
+[node name="LedgeGrab" type="Node" parent="StateMachine"]
+script = ExtResource("9_ledge")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("21_attack")
+
+[node name="Heavy" type="Node" parent="StateMachine"]
+script = ExtResource("22_heavy")
+
+[node name="Dodge" type="Node" parent="StateMachine"]
+script = ExtResource("23_dodge")
+
+[node name="Block" type="Node" parent="StateMachine"]
+script = ExtResource("24_block")
+
+[node name="Stagger" type="Node" parent="StateMachine"]
+script = ExtResource("25_stagger")
+
+[node name="Death" type="Node" parent="StateMachine"]
+script = ExtResource("26_death")
+
+[node name="Flask" type="Node" parent="StateMachine"]
+script = ExtResource("27_flask")
+
+[node name="GroundRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+target_position = Vector3(0, -0.8, 0)
+collide_with_areas = true
+
+[node name="FootstepEmitter" type="Node3D" parent="." node_paths=PackedStringArray("ground_ray", "body")]
+script = ExtResource("28_steps")
+ground_ray = NodePath("../GroundRay")
+body = NodePath("..")
+
+[node name="HitFeedback" type="Node" parent="." node_paths=PackedStringArray("meshes", "actor", "combatant")]
+script = ExtResource("fx_feedback")
+meshes = [NodePath("Body/Mesh"), NodePath("Body/FacingNub")]
+actor = NodePath("..")
+combatant = NodePath("../Combatant")
+combat_tuning = ExtResource("13_ctuning")

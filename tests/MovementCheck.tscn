@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://levels/test/movement_gym.tscn" id="1_gym"]
+[ext_resource type="Script" path="res://tests/movement_check.gd" id="2_verify"]
+
+[node name="VerifyMovement" type="Node"]
+
+[node name="MovementGym" parent="." instance=ExtResource("1_gym")]
+
+[node name="Verifier" type="Node" parent="."]
+script = ExtResource("2_verify")

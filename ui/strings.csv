@@ -1,0 +1,65 @@
+keys,en
+UI_NEW_RUN,New Run
+UI_CONTINUE,Continue
+UI_SETTINGS,Settings
+UI_QUIT,Quit
+UI_RESUME,Resume
+UI_BACK,Back
+UI_RESTORE_DEFAULTS,Restore Defaults
+UI_YOU_DIED,YOU DIED
+UI_RESPAWN,Return to Wayshrine
+UI_LOADING,Loading
+UI_REST,Rest
+UI_LEVEL_UP,Level Up
+UI_ALLOCATE,Allocate
+UI_EMBERS,Embers
+UI_LEVEL,Level
+UI_NEXT_LEVEL_COST,Next level
+UI_POINTS_UNSPENT,Points to spend
+UI_STAT_VIGOR,Vigor
+UI_STAT_ENDURANCE,Endurance
+UI_STAT_MIGHT,Might
+UI_STAT_FINESSE,Finesse
+UI_STAT_EMBER_BOUND,Ember-Bound
+UI_STAT_VIGOR_DESC,Maximum health. Softens past 30.
+UI_STAT_ENDURANCE_DESC,Stamina pool and how fast it returns.
+UI_STAT_MIGHT_DESC,Heavy weapon scaling and block stability.
+UI_STAT_FINESSE_DESC,Fast weapon scaling and dodge invulnerability.
+UI_STAT_EMBER_BOUND_DESC,Flask potency and lantern radius.
+UI_HP,Health
+UI_STAMINA,Stamina
+UI_FLASK,Flask
+UI_SETTINGS_DISPLAY,Display
+UI_SETTINGS_AUDIO,Audio
+UI_SETTINGS_INPUT,Controls
+UI_SETTINGS_ACCESS,Accessibility
+UI_QUALITY,Quality
+UI_QUALITY_LOW,Low
+UI_QUALITY_MID,Medium
+UI_QUALITY_HIGH,High
+UI_BRIGHTNESS,Brightness
+UI_DAMAGE_NUMBERS,Damage numbers
+UI_CAMERA_SHAKE,Camera shake
+UI_SUBTITLE_SIZE,Subtitle size
+UI_PALETTE,Colour palette
+UI_PALETTE_DEFAULT,Default
+UI_PALETTE_DEUTERANOPIA,Deuteranopia
+UI_PALETTE_PROTANOPIA,Protanopia
+UI_PALETTE_TRITANOPIA,Tritanopia
+UI_SPRINT_MODE,Sprint
+UI_BLOCK_MODE,Block
+UI_MODE_HOLD,Hold
+UI_MODE_TOGGLE,Toggle
+UI_HAPTICS,Vibration
+UI_TOUCH_OPACITY,Button opacity
+UI_TOUCH_SCALE,Button size
+UI_EDIT_LAYOUT,Edit control layout
+UI_LAYOUT_HINT,Drag a button to move it. Double-tap to reset.
+UI_MASTER_VOLUME,Master
+UI_MUSIC_VOLUME,Music
+UI_SFX_VOLUME,Effects
+UI_AMBIENCE_VOLUME,Ambience
+UI_UI_VOLUME,Interface
+UI_INTERACT_REST,Rest
+UI_INTERACT_OPEN,Open
+UI_INTERACT_RECOVER,Recover Embers

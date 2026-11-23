@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="BiomeMood" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/biomes/biome_mood.gd" id="1_mood"]
+
+[resource]
+script = ExtResource("1_mood")
+id = &"village"
+display_name = "Ashfall Village"
+fog_color = Color(0.78, 0.54, 0.29, 1)
+fog_density = 0.012
+fog_height_min = -2.0
+fog_height_max = 14.0
+fog_card_density = 1.0
+ambient_color = Color(0.45, 0.5, 0.6, 1)
+ambient_energy = 0.55
+sun_color = Color(1.0, 0.78, 0.52, 1)
+sun_energy = 1.6
+sun_elevation = -32.0
+sun_azimuth = 155.0
+rim_color = Color(1.0, 0.85, 0.6, 1)
+exposure_ev = 0.15
+white_point = 1.7
+contrast = 1.06
+saturation = 0.92
+sky_horizon = Color(0.72, 0.55, 0.38, 1)
+sky_top = Color(0.29, 0.36, 0.48, 1)
+sky_ground = Color(0.17, 0.14, 0.12, 1)
+aerial_perspective = 0.65
+fog_sun_scatter = 0.45
+glow_strength = 0.22
+lut_blend = 1.0
+vignette_strength = 0.18
+grain_amount = 0.02
+chromatic_aberration = 0.0
+wind_strength = 0.35
+camera_fov = 42.0
+reverb_wet = 0.12
+music_stem_mask = 31
+particle_preset = &"ember_drift"

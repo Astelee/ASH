@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="BiomeMood" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/biomes/biome_mood.gd" id="1_mood"]
+
+[resource]
+script = ExtResource("1_mood")
+id = &"ossuary"
+display_name = "The Ossuary Deep"
+fog_color = Color(0.20, 0.28, 0.31, 1)
+fog_density = 0.048
+fog_height_min = -2.0
+fog_height_max = 6.0
+fog_card_density = 1.0
+ambient_color = Color(0.30, 0.40, 0.45, 1)
+ambient_energy = 0.15
+sun_color = Color(0.55, 0.68, 0.75, 1)
+sun_energy = 0.15
+sun_elevation = -80.0
+sun_azimuth = 90.0
+rim_color = Color(0.55, 0.78, 0.88, 1)
+exposure_ev = 0.6
+white_point = 1.2
+contrast = 1.14
+saturation = 0.7
+sky_horizon = Color(0.09, 0.1, 0.12, 1)
+sky_top = Color(0.03, 0.04, 0.06, 1)
+sky_ground = Color(0.03, 0.03, 0.04, 1)
+aerial_perspective = 0.25
+fog_sun_scatter = 0.05
+glow_strength = 0.34
+lut_blend = 1.0
+vignette_strength = 0.45
+grain_amount = 0.08
+chromatic_aberration = 0.35
+wind_strength = 0.08
+camera_fov = 34.0
+reverb_wet = 0.6
+music_stem_mask = 1
+particle_preset = &"dust_motes"

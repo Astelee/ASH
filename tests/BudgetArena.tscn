@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tests/budget_check.gd" id="1_check"]
+[ext_resource type="PackedScene" path="res://levels/biomes/cadwyn_arena.tscn" id="2_scene"]
+
+[node name="BudgetArena" type="Node"]
+script = ExtResource("1_check")
+scene = ExtResource("2_scene")
+scene_name = "Cadwyn Arena"
