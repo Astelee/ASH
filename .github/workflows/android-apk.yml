@@ -1,3 +1,4 @@
+
 name: Build ASHFALL Android APK
 
 on:
@@ -30,6 +31,7 @@ jobs:
     name: Export debug APK
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+
     env:
       GODOT_VERSION: '4.7.1'
       ANDROID_HOME: /usr/local/lib/android/sdk
@@ -46,7 +48,9 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
 
       - name: Install Android SDK packages
         run: |
@@ -62,21 +66,33 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
           GODOT_BASE="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+
           curl -fL "$GODOT_BASE/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip" -o /tmp/godot.zip
+
           curl -fL "$GODOT_BASE/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" -o /tmp/godot-templates.tpz
+
           mkdir -p /tmp/godot-bin
+
           unzip -q /tmp/godot.zip -d /tmp/godot-bin
+
           sudo install -m 0755 "/tmp/godot-bin/Godot_v${GODOT_VERSION}-stable_linux.x86_64" /usr/local/bin/godot
+
           mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
           mkdir -p /tmp/godot-templates
+
           unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
+
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+
           godot --version
 
       - name: Configure Godot Android SDK paths
         run: |
           mkdir -p "$HOME/.config/godot"
+
           cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF_SETTINGS
           [gd_resource type="EditorSettings" format=3]
 
@@ -88,13 +104,17 @@ jobs:
       - name: Import project and install Android build template
         run: |
           mkdir -p export
+
           godot --headless --editor --path . --import
+
           godot --headless --path . --install-android-build-template --export-debug "Android APK" export/ashfall.apk
 
       - name: Verify APK was created
         run: |
           test -s export/ashfall.apk
+
           file export/ashfall.apk
+
           unzip -t export/ashfall.apk >/dev/null
 
       - name: Upload APK artifact
